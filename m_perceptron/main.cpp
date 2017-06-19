@@ -4,6 +4,7 @@
 #include <iostream>
 #include <math.h>
 #include "Eigen/Core"
+#include "Node.h"
 
 using namespace std;
 using namespace Eigen;
@@ -17,8 +18,19 @@ double sigmoid(double x){
     return 1/(1+exp(-x));
 }
 
-
 int main() {
+
+    Node inN((char*)"input", 2.0);
+    Node hiN((char*)"hidden", 4.5);
+    Node outN((char*)"output", 5.0);
+    inN.outbound = &outN;
+    hiN.inbound = &inN;
+    outN.inbound = &hiN;
+
+    cout << outN.inbound->name << endl;
+    cout << inN.forward() << endl;
+    cout << hiN.forward() << endl;
+    cout << outN.forward() << endl;
 
     const int N_input = 4;
     const int N_hidden = 3;
@@ -37,7 +49,6 @@ int main() {
 
     PRINT_MAT2(out, "sigmoid(x*w1)");
 
-    cout << "compute dot" << endl;
 
     return 0;
 }
