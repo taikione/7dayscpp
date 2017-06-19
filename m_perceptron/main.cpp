@@ -2,7 +2,6 @@
  * This is code to implement multilayer perceptron
  */
 #include <iostream>
-#include <math.h>
 #include "Eigen/Core"
 #include "Node.h"
 
@@ -14,41 +13,29 @@ using namespace Eigen;
 #define PRINT_FNC    cout << "[" << __func__ << "]" << endl
 
 
-double sigmoid(double x){
-    return 1/(1+exp(-x));
-}
-
 int main() {
-
-    Node inN((char*)"input", 2.0);
-    Node hiN((char*)"hidden", 4.5);
-    Node outN((char*)"output", 5.0);
-    inN.outbound = &outN;
-    hiN.inbound = &inN;
-    outN.inbound = &hiN;
-
-    cout << outN.inbound->name << endl;
-    cout << inN.forward() << endl;
-    cout << hiN.forward() << endl;
-    cout << outN.forward() << endl;
-
     const int N_input = 4;
     const int N_hidden = 3;
     const int N_output = 2;
 
-    MatrixXd w1 = MatrixXd::Ones(N_input, N_hidden);
-    MatrixXd x(1, N_input);
+    // Define input vector
+    MatrixXd input_vector(1, N_input);
+    input_vector << 1.0, 0.5, 0.5, 1.0;
 
-    x << 1.0, 0.5, 0.5, 1.0;
+    Node input_layer((char*)"input", input_vector);
+    Node hidden_layer((char*)"hidden", MatrixXd::Ones(1,1));
+    Node output_layer((char*)"output", MatrixXd::Ones(1,1));
 
-    MatrixXd Y = x*w1;
+    // connect each node
+    hidden_layer.inbound = &input_layer;
+    output_layer.inbound = &hidden_layer;
 
-    PRINT_MAT2(Y, "x*w1");
+    // Initialize all weight
+    hidden_layer.initWeight(N_input, N_hidden);
+    output_layer.initWeight(N_hidden, N_output);
 
-    MatrixXd out = Y.array().unaryExpr(&sigmoid);
-
-    PRINT_MAT2(out, "sigmoid(x*w1)");
-
+    PRINT_MAT2(hidden_layer.forward(), "hidden forward");
+    PRINT_MAT2(output_layer.forward(), "output forward");
 
     return 0;
 }

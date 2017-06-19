@@ -1,13 +1,22 @@
 #ifndef M_PERCEPTRON_NODE_H
 #define M_PERCEPTRON_NODE_H
 
+#include "Eigen/Core"
+#include <iostream>
+using namespace Eigen;
+using namespace std;
+
 class Node {
 private:
-    double value;
+    MatrixXd values;
+    MatrixXd weight;
 
 public:
-    Node(char* name, double v);
-    double forward();
+    Node(char* name, MatrixXd v);
+    void initWeight(int h, int w);
+    MatrixXd forward();
+    //double sigmoid(double x);
+
     Node* outbound;
     Node* inbound;
     char* name;
