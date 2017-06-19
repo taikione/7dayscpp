@@ -22,13 +22,9 @@ int main() {
     MatrixXd input_vector(1, N_input);
     input_vector << 1.0, 0.5, 0.5, 1.0;
 
-    Node input_layer((char*)"input", input_vector);
-    Node hidden_layer((char*)"hidden");
-    Node output_layer((char*)"output");
-
-    // connect each node
-    hidden_layer.inbound = &input_layer;
-    output_layer.inbound = &hidden_layer;
+    Node input_layer((char*)"input", NULL, input_vector);
+    Node hidden_layer((char*)"hidden", &input_layer);
+    Node output_layer((char*)"output", &hidden_layer);
 
     // Initialize all weight
     hidden_layer.initWeight(N_input, N_hidden);

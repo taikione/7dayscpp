@@ -12,7 +12,7 @@ private:
     MatrixXd weight;
 
 public:
-    Node(char* name, MatrixXd v = MatrixXd::Ones(1,1));
+    Node(char* name, Node* in, MatrixXd v = MatrixXd::Ones(1,1));
     void initWeight(int h, int w);
     MatrixXd forward();
     //double sigmoid(double x);
