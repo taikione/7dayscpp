@@ -23,8 +23,8 @@ int main() {
     input_vector << 1.0, 0.5, 0.5, 1.0;
 
     Node input_layer((char*)"input", input_vector);
-    Node hidden_layer((char*)"hidden", MatrixXd::Ones(1,1));
-    Node output_layer((char*)"output", MatrixXd::Ones(1,1));
+    Node hidden_layer((char*)"hidden");
+    Node output_layer((char*)"output");
 
     // connect each node
     hidden_layer.inbound = &input_layer;

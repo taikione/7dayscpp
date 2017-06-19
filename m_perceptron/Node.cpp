@@ -5,15 +5,6 @@ double sigmoid(double x){
     return 1/(1+std::exp(-x));
 }
 
-/*
-Node::Node(char* name) {
-    Node::name = name;
-    Node::values = MatrixXd::Ones(1,1);
-    Node::inbound = 0;
-    Node::outbound = 0;
-}
- */
-
 Node::Node(char* name, MatrixXd v) {
     Node::name = name;
     Node::values = v;
