@@ -3,81 +3,41 @@
  */
 #include <iostream>
 #include <math.h>
+#include "Eigen/Core"
 
-class activation{
-public:
-    double sigmoid(double x);
-};
+using namespace std;
+using namespace Eigen;
 
-double activation::sigmoid(double x) {
+#define PRINT_MAT(X) cout << #X << ":\n" << X << endl << endl
+#define PRINT_MAT2(X,DESC) cout << DESC << ":\n" << X << endl << endl
+#define PRINT_FNC    cout << "[" << __func__ << "]" << endl
+
+
+double sigmoid(double x){
     return 1/(1+exp(-x));
-}
-
-void initWeight(float (*weight)[3], int height, int width){
-    for(int h=0; h<height; h++){
-        for(int w=0; w<width; w++){
-            weight[h][w] = (float)(rand()%100)/100;
-        }
-    }
-}
-
-void initWeight(float (*weight)[2], int height, int width){
-    for(int h=0; h<height; h++){
-        for(int w=0; w<width; w++){
-            weight[h][w] = (float)(rand()%100)/100;
-        }
-    }
-}
-
-void dot(float *output, float *input, float (*weight)[3], int in_height, int in_width, int w_height, int w_width){
-    activation active;
-
-    for(int w=0; w<w_width; w++){
-        float out = 0.0;
-        for(int t=0; t<in_width; t++){
-            out += input[t] * weight[t][w];
-        }
-        output[w] = active.sigmoid(out);
-    }
-
-}
-
-void dot(float *output, float *input, float (*weight)[2], int in_height, int in_width, int w_height, int w_width){
-    activation active;
-
-    for(int w=0; w<w_width; w++){
-        float out = 0.0;
-        for(int t=0; t<in_width; t++){
-            out += input[t] * weight[t][w];
-        }
-        output[w] = active.sigmoid(out);
-    }
-
 }
 
 
 int main() {
-    double input = 2.0;
-    activation active;
 
     const int N_input = 4;
     const int N_hidden = 3;
     const int N_output = 2;
-    float intermediate[3];
-    float y[2];
 
-    float input_hidden[N_input][N_hidden];
-    float hidden_output[N_hidden][N_output];
+    MatrixXd w1 = MatrixXd::Ones(N_input, N_hidden);
+    MatrixXd x(1, N_input);
 
-    initWeight(input_hidden, N_input, N_hidden);
-    initWeight(hidden_output, N_hidden, N_output);
+    x << 1.0, 0.5, 0.5, 1.0;
 
-    float X[] = {1.0, 0.5, 0.5, 1.0};
+    MatrixXd Y = x*w1;
 
-    dot(intermediate, X, input_hidden, 1, 4, 4, 3);
-    dot(y, intermediate, hidden_output, 1, 3, 3, 2);
+    PRINT_MAT2(Y, "x*w1");
 
-    std::cout << "compute dot" << std::endl;
+    MatrixXd out = Y.array().unaryExpr(&sigmoid);
+
+    PRINT_MAT2(out, "sigmoid(x*w1)");
+
+    cout << "compute dot" << endl;
 
     return 0;
 }
