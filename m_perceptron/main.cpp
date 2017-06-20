@@ -2,6 +2,7 @@
  * This is code to implement multilayer perceptron
  */
 #include <iostream>
+#include <memory>
 #include "Eigen/Core"
 #include "Node.h"
 #include "Buffer.h"
@@ -23,6 +24,11 @@ int main() {
     MatrixXd input_vector(1, N_input);
     input_vector << 1.0, 0.5, 0.5, 1.0;
 
+    unique_ptr<Node> input_ptr(new Node((char*)"input", nullptr, input_vector));
+    unique_ptr<Node> hidden_ptr(new Node((char*)"hidden", input_ptr.get()));
+    unique_ptr<Node> out_ptr(new Node((char*)"hidden", hidden_ptr.get()));
+
+    /*
     Node *input_ptr = new Node((char*)"input", nullptr, input_vector);
     Buffer input_node(input_ptr);
 
@@ -31,7 +37,7 @@ int main() {
 
     Node *out_ptr = new Node((char*)"hidden", hidden_ptr);
     Buffer out_node(out_ptr);
-
+    */
 
     // Initialize all weight
     hidden_ptr->initWeight(N_input, N_hidden);
